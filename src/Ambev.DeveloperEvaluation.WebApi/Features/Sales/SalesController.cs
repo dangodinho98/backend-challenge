@@ -1,4 +1,5 @@
 using Ambev.DeveloperEvaluation.Application.Sales.CancelSale;
+using Ambev.DeveloperEvaluation.Application.Sales.CancelSaleItem;
 using Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
 using Ambev.DeveloperEvaluation.Application.Sales.GetSale;
 using Ambev.DeveloperEvaluation.Application.Sales.ListSales;
@@ -110,6 +111,21 @@ public class SalesController : BaseController
         {
             Success = true,
             Message = "Sale cancelled successfully",
+            Data = _mapper.Map<SaleResponse>(result)
+        });
+    }
+
+    [HttpPatch("{id:guid}/items/{itemId:guid}/cancel")]
+    [ProducesResponseType(typeof(ApiResponseWithData<SaleResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> CancelItem([FromRoute] Guid id, [FromRoute] Guid itemId, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(new CancelSaleItemCommand { SaleId = id, ItemId = itemId }, cancellationToken);
+        return Ok(new ApiResponseWithData<SaleResponse>
+        {
+            Success = true,
+            Message = "Sale item cancelled successfully",
             Data = _mapper.Map<SaleResponse>(result)
         });
     }

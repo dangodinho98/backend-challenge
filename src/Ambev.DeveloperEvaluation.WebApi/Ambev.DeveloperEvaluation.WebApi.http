@@ -46,3 +46,6 @@ Content-Type: application/json
 
 ### Cancel sale
 PATCH {{Ambev.DeveloperEvaluation.WebApi_HostAddress}}/api/sales/00000000-0000-0000-0000-000000000000/cancel
+
+### Cancel sale line item
+PATCH {{Ambev.DeveloperEvaluation.WebApi_HostAddress}}/api/sales/00000000-0000-0000-0000-000000000000/items/00000000-0000-0000-0000-000000000001/cancel
