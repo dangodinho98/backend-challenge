@@ -64,12 +64,73 @@ See [Frameworks](/.doc/frameworks.md)
 <!-- 
 ## API Structure
 This section includes links to the detailed documentation for the different API resources:
-- [API General](./docs/general-api.md)
+- [API General](./.doc/general-api.md)
+- [Sales API](/.doc/sales-api.md)
 - [Products API](/.doc/products-api.md)
 - [Carts API](/.doc/carts-api.md)
 - [Users API](/.doc/users-api.md)
 - [Auth API](/.doc/auth-api.md)
 -->
+
+## API Structure
+
+Detailed API documentation:
+
+- [General API conventions](.doc/general-api.md) — pagination, ordering, filtering, errors
+- [Sales API](.doc/sales-api.md) — **primary deliverable** (CRUD + cancel operations)
+- [Products API](.doc/products-api.md) — template reference
+- [Carts API](.doc/carts-api.md) — template reference
+- [Users API](.doc/users-api.md) — template reference
+- [Auth API](.doc/auth-api.md) — template reference
+
+Interactive API docs (Development): run the Web API and open `/swagger`.
+
+## Getting Started
+
+### Prerequisites
+
+- [.NET 8 SDK](https://dotnet.microsoft.com/download)
+- [PostgreSQL](https://www.postgresql.org/) (local or Docker)
+
+### Configuration
+
+Update the PostgreSQL connection string in `src/Ambev.DeveloperEvaluation.WebApi/appsettings.json`:
+
+```json
+"ConnectionStrings": {
+  "DefaultConnection": "Host=localhost;Port=5432;Database=developer_evaluation;Username=developer;Password=ev@luAt10n"
+}
+```
+
+Or start the database via Docker Compose:
+
+```bash
+docker compose up -d ambev.developerevaluation.database
+```
+
+### Database migrations
+
+```bash
+dotnet ef database update \
+  --project src/Ambev.DeveloperEvaluation.ORM \
+  --startup-project src/Ambev.DeveloperEvaluation.WebApi
+```
+
+### Run the API
+
+```bash
+dotnet run --project src/Ambev.DeveloperEvaluation.WebApi
+```
+
+- HTTP: `http://localhost:5119`
+- Swagger UI: `http://localhost:5119/swagger`
+- Sample requests: `src/Ambev.DeveloperEvaluation.WebApi/Ambev.DeveloperEvaluation.WebApi.http`
+
+### Run tests
+
+```bash
+dotnet test Ambev.DeveloperEvaluation.sln
+```
 
 ## Project Structure
 This section describes the overall structure and organization of the project files and directories. 
