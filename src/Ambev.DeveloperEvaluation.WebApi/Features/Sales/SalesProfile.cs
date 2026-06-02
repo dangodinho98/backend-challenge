@@ -1,4 +1,5 @@
 using Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
+using Ambev.DeveloperEvaluation.Application.Sales.ListSales;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSale;
 using AutoMapper;
 
@@ -22,6 +23,15 @@ public class SalesProfile : Profile
                 Quantity = i.Quantity,
                 UnitPrice = i.UnitPrice
             })));
+
+        CreateMap<ListSalesRequest, ListSalesQuery>()
+            .ForMember(dest => dest.Page, opt => opt.MapFrom(src => src._page))
+            .ForMember(dest => dest.Size, opt => opt.MapFrom(src => src._size))
+            .ForMember(dest => dest.Order, opt => opt.MapFrom(src => src._order))
+            .ForMember(dest => dest.MinSaleDate, opt => opt.MapFrom(src => src._minSaleDate))
+            .ForMember(dest => dest.MaxSaleDate, opt => opt.MapFrom(src => src._maxSaleDate))
+            .ForMember(dest => dest.MinTotalAmount, opt => opt.MapFrom(src => src._minTotalAmount))
+            .ForMember(dest => dest.MaxTotalAmount, opt => opt.MapFrom(src => src._maxTotalAmount));
 
         CreateMap<Application.Sales.Common.ExternalIdentityModel, ExternalIdentityResponse>();
         CreateMap<Application.Sales.Common.SaleItemModel, SaleItemResponse>();

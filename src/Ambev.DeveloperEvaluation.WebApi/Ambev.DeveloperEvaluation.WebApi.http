@@ -20,3 +20,9 @@ Content-Type: application/json
 
 ### Get sale by id
 GET {{Ambev.DeveloperEvaluation.WebApi_HostAddress}}/api/sales/00000000-0000-0000-0000-000000000000
+
+### List sales
+GET {{Ambev.DeveloperEvaluation.WebApi_HostAddress}}/api/sales?_page=1&_size=10&_order=saleDate desc
+
+### List sales with filters
+GET {{Ambev.DeveloperEvaluation.WebApi_HostAddress}}/api/sales?SaleNumber=SALE*&Customer=Acme&_minTotalAmount=10&_maxTotalAmount=500

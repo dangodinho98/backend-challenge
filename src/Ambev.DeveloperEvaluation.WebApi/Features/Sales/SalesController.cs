@@ -1,5 +1,6 @@
 using Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
 using Ambev.DeveloperEvaluation.Application.Sales.GetSale;
+using Ambev.DeveloperEvaluation.Application.Sales.ListSales;
 using Ambev.DeveloperEvaluation.WebApi.Common;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSale;
 using AutoMapper;
@@ -39,6 +40,22 @@ public class SalesController : BaseController
             Success = true,
             Message = "Sale created successfully",
             Data = _mapper.Map<SaleResponse>(result)
+        });
+    }
+
+    [HttpGet]
+    [ProducesResponseType(typeof(SaleListResponse), StatusCodes.Status200OK)]
+    public async Task<IActionResult> List([FromQuery] ListSalesRequest request, CancellationToken cancellationToken)
+    {
+        var query = _mapper.Map<ListSalesQuery>(request);
+        var result = await _mediator.Send(query, cancellationToken);
+
+        return Ok(new SaleListResponse
+        {
+            Data = result.Data.Select(s => _mapper.Map<SaleResponse>(s)).ToList(),
+            TotalItems = result.TotalItems,
+            CurrentPage = result.CurrentPage,
+            TotalPages = result.TotalPages
         });
     }
 
