@@ -26,3 +26,20 @@ GET {{Ambev.DeveloperEvaluation.WebApi_HostAddress}}/api/sales?_page=1&_size=10&
 
 ### List sales with filters
 GET {{Ambev.DeveloperEvaluation.WebApi_HostAddress}}/api/sales?SaleNumber=SALE*&Customer=Acme&_minTotalAmount=10&_maxTotalAmount=500
+
+### Update sale (full replace)
+PUT {{Ambev.DeveloperEvaluation.WebApi_HostAddress}}/api/sales/00000000-0000-0000-0000-000000000000
+Content-Type: application/json
+
+{
+  "saleDate": "2026-06-02T10:00:00Z",
+  "customer": { "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6", "name": "Acme Corp" },
+  "branch": { "id": "4fa85f64-5717-4562-b3fc-2c963f66afa7", "name": "Downtown" },
+  "items": [
+    {
+      "product": { "id": "5fa85f64-5717-4562-b3fc-2c963f66afa8", "name": "Beer 600ml" },
+      "quantity": 10,
+      "unitPrice": 10.00
+    }
+  ]
+}
