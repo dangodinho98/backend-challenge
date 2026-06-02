@@ -95,6 +95,20 @@ public class SaleRepository : ISaleRepository
         return sale;
     }
 
+    public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        var sale = await _context.Sales
+            .Include("_items")
+            .FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
+
+        if (sale is null)
+            return false;
+
+        _context.Sales.Remove(sale);
+        await _context.SaveChangesAsync(cancellationToken);
+        return true;
+    }
+
     private static string StripWildcards(string value) => value.Replace("*", string.Empty).Trim();
 
     private static IQueryable<Sale> ApplyOrdering(IQueryable<Sale> query, string? order)

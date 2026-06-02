@@ -26,4 +26,5 @@ public interface ISaleRepository
     Task<Sale?> GetBySaleNumberAsync(string saleNumber, CancellationToken cancellationToken = default);
     Task<(IReadOnlyList<Sale> Items, int TotalCount)> ListAsync(SaleListCriteria criteria, CancellationToken cancellationToken = default);
     Task<Sale> UpdateAsync(Sale sale, CancellationToken cancellationToken = default);
+    Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
 }
