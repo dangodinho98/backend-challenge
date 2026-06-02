@@ -55,7 +55,7 @@ public class SalesController : BaseController
         var query = _mapper.Map<ListSalesQuery>(request);
         var result = await _mediator.Send(query, cancellationToken);
 
-        return Ok(new SaleListResponse
+        return new OkObjectResult(new SaleListResponse
         {
             Data = result.Data.Select(s => _mapper.Map<SaleResponse>(s)).ToList(),
             TotalItems = result.TotalItems,
@@ -70,7 +70,7 @@ public class SalesController : BaseController
     public async Task<IActionResult> GetById([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new GetSaleQuery { Id = id }, cancellationToken);
-        return Ok(new ApiResponseWithData<SaleResponse>
+        return new OkObjectResult(new ApiResponseWithData<SaleResponse>
         {
             Success = true,
             Message = "Sale retrieved successfully",
@@ -93,7 +93,7 @@ public class SalesController : BaseController
         command.Id = id;
         var result = await _mediator.Send(command, cancellationToken);
 
-        return Ok(new ApiResponseWithData<SaleResponse>
+        return new OkObjectResult(new ApiResponseWithData<SaleResponse>
         {
             Success = true,
             Message = "Sale updated successfully",
@@ -108,7 +108,7 @@ public class SalesController : BaseController
     public async Task<IActionResult> Cancel([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new CancelSaleCommand { Id = id }, cancellationToken);
-        return Ok(new ApiResponseWithData<SaleResponse>
+        return new OkObjectResult(new ApiResponseWithData<SaleResponse>
         {
             Success = true,
             Message = "Sale cancelled successfully",
@@ -123,7 +123,7 @@ public class SalesController : BaseController
     public async Task<IActionResult> CancelItem([FromRoute] Guid id, [FromRoute] Guid itemId, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new CancelSaleItemCommand { SaleId = id, ItemId = itemId }, cancellationToken);
-        return Ok(new ApiResponseWithData<SaleResponse>
+        return new OkObjectResult(new ApiResponseWithData<SaleResponse>
         {
             Success = true,
             Message = "Sale item cancelled successfully",
@@ -137,7 +137,7 @@ public class SalesController : BaseController
     public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         await _mediator.Send(new DeleteSaleCommand { Id = id }, cancellationToken);
-        return Ok(new ApiResponse
+        return new OkObjectResult(new ApiResponse
         {
             Success = true,
             Message = "Sale deleted successfully"

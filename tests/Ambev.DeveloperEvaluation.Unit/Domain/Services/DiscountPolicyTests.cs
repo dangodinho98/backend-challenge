@@ -26,6 +26,19 @@ public class DiscountPolicyTests
     }
 
     [Fact]
+    public void GivenZeroQuantity_WhenGetDiscountPercent_ThenThrows()
+    {
+        Assert.Throws<Ambev.DeveloperEvaluation.Domain.Exceptions.DomainException>(() => DiscountPolicy.GetDiscountPercent(0));
+    }
+
+    [Fact]
+    public void GivenTwentyItemsAtTen_WhenCalculateLineTotal_ThenAppliesTwentyPercentDiscount()
+    {
+        var total = DiscountPolicy.CalculateLineTotal(20, 10m);
+        Assert.Equal(160m, total);
+    }
+
+    [Fact]
     public void GivenFiveItemsAtTen_WhenCalculateLineTotal_ThenAppliesTenPercentDiscount()
     {
         var total = DiscountPolicy.CalculateLineTotal(5, 10m);

@@ -58,4 +58,52 @@ public class SaleTests
         Assert.Equal(15m, sale.TotalAmount);
         Assert.True(sale.Items.First().IsCancelled);
     }
+
+    public static IEnumerable<object[]> QuantityLineTotalCases =>
+    [
+        [4, 40m],
+        [5, 45m],
+        [9, 81m],
+        [10, 80m],
+        [20, 160m]
+    ];
+
+    [Theory]
+    [MemberData(nameof(QuantityLineTotalCases))]
+    public void GivenQuantity_WhenCreate_ThenAppliesExpectedLineTotal(int quantity, decimal expectedTotal)
+    {
+        var sale = Sale.Create(
+            $"SALE-QTY-{quantity}",
+            DateTime.UtcNow,
+            Customer,
+            Branch,
+            [(Product, quantity, 10m)]);
+
+        Assert.Equal(expectedTotal, sale.TotalAmount);
+    }
+
+    [Fact]
+    public void GivenQuantityAboveMax_WhenCreate_ThenThrows()
+    {
+        Assert.Throws<MaxQuantityExceededException>(() =>
+            Sale.Create("SALE-OVER", DateTime.UtcNow, Customer, Branch, [(Product, 21, 10m)]));
+    }
+
+    [Fact]
+    public void GivenCancelledItem_WhenCancelItemAgain_ThenThrows()
+    {
+        var sale = Sale.Create("SALE-004", DateTime.UtcNow, Customer, Branch, [(Product, 2, 10m)]);
+        var itemId = sale.Items.First().Id;
+        sale.CancelItem(itemId);
+
+        Assert.Throws<SaleItemAlreadyCancelledException>(() => sale.CancelItem(itemId));
+    }
+
+    [Fact]
+    public void GivenMissingItem_WhenCancelItem_ThenThrowsDomainException()
+    {
+        var sale = Sale.Create("SALE-005", DateTime.UtcNow, Customer, Branch, [(Product, 2, 10m)]);
+
+        Assert.Throws<DomainException>(() => sale.CancelItem(Guid.NewGuid()));
+    }
 }

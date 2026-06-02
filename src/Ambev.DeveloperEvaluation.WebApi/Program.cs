@@ -12,7 +12,7 @@ using Serilog;
 
 namespace Ambev.DeveloperEvaluation.WebApi;
 
-public class Program
+public partial class Program
 {
     public static void Main(string[] args)
     {
@@ -29,12 +29,20 @@ public class Program
             builder.AddBasicHealthChecks();
             builder.Services.AddSwaggerGen();
 
-            builder.Services.AddDbContext<DefaultContext>(options =>
-                options.UseNpgsql(
-                    builder.Configuration.GetConnectionString("DefaultConnection"),
-                    b => b.MigrationsAssembly("Ambev.DeveloperEvaluation.ORM")
-                )
-            );
+            if (builder.Environment.IsEnvironment("Testing"))
+            {
+                builder.Services.AddDbContext<DefaultContext>(options =>
+                    options.UseInMemoryDatabase("SalesFunctionalTests"));
+            }
+            else
+            {
+                builder.Services.AddDbContext<DefaultContext>(options =>
+                    options.UseNpgsql(
+                        builder.Configuration.GetConnectionString("DefaultConnection"),
+                        b => b.MigrationsAssembly("Ambev.DeveloperEvaluation.ORM")
+                    )
+                );
+            }
 
             builder.Services.AddJwtAuthentication(builder.Configuration);
 
@@ -62,7 +70,8 @@ public class Program
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
+            if (!app.Environment.IsEnvironment("Testing"))
+                app.UseHttpsRedirection();
 
             app.UseAuthentication();
             app.UseAuthorization();
