@@ -43,3 +43,6 @@ Content-Type: application/json
     }
   ]
 }
+
+### Cancel sale
+PATCH {{Ambev.DeveloperEvaluation.WebApi_HostAddress}}/api/sales/00000000-0000-0000-0000-000000000000/cancel
